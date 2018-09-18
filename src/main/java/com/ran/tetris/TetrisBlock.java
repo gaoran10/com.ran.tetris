@@ -2,27 +2,54 @@ package com.ran.tetris;
 
 import com.ran.tetris.block.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TetrisBlock extends Canvas {
+public class TetrisBlock extends JPanel {
 
-    public List<Cell> cellList = new ArrayList<>();
+    protected List<Cell> cellList = new ArrayList<>();
 
-    public void moveLeft() {
+    public List<Cell> getCellList() {
+        return cellList;
+    }
+
+    public void setCellList(List<Cell> cellList) {
+        this.cellList = cellList;
+    }
+
+    public void moveLeft(WallPanel wallPanel) {
+        for (Cell cell : cellList) {
+            if(cell.checkBlockCollideWall(wallPanel, Cell.MOVE_LEFT)) {
+                return;
+            }
+        }
+        this.setBounds(this.getX() - Cell.HEIGHT, this.getY(), this.getWidth(), this.getHeight());
         for (Cell cell : cellList) {
             cell.setCol(cell.getCol() - 1);
         }
     }
 
-    public void moveRight() {
+    public void moveRight(WallPanel wallPanel) {
+        for (Cell cell : cellList) {
+            if(cell.checkBlockCollideWall(wallPanel, Cell.MOVE_RIGHT)) {
+                return;
+            }
+        }
+        this.setBounds(this.getX() + Cell.HEIGHT, this.getY(), this.getWidth(), this.getHeight());
         for (Cell cell : cellList) {
             cell.setCol(cell.getCol() + 1);
         }
     }
 
-    public void moveDown() {
+    public void moveDown(WallPanel wallPanel) {
+        for (Cell cell : cellList) {
+            if(cell.checkBlockCollideWall(wallPanel, Cell.MOVE_DOWN)) {
+                return;
+            }
+        }
+        this.setBounds(this.getX(), this.getY() + Cell.WIDTH, this.getWidth(), this.getHeight());
         for (Cell cell : cellList) {
             cell.setRow(cell.getRow() + 1);
         }
@@ -49,11 +76,10 @@ public class TetrisBlock extends Canvas {
         return null;
     }
 
-    public void paint(Graphics g) {
-        System.out.println("paint");
+    @Override
+    protected void paintComponent(Graphics g) {
         for (Cell cell : cellList) {
-            cell.paint(g);
+            cell.paintComponent(g);
         }
     }
-
 }

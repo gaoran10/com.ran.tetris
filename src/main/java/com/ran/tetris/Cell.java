@@ -1,11 +1,15 @@
 package com.ran.tetris;
 
+import javax.swing.*;
 import java.awt.*;
 
-public class Cell extends Canvas {
+public class Cell extends JPanel {
 
-    private static int WIDTH = 20;
-    private static int HEIGHT = 20;
+    public static int WIDTH = 20;
+    public static int HEIGHT = 20;
+    public static final int MOVE_DOWN = 1;
+    public static final int MOVE_LEFT = 2;
+    public static final int MOVE_RIGHT = 3;
 
     private Integer row;
 
@@ -13,10 +17,13 @@ public class Cell extends Canvas {
 
     private Color color;
 
+    private Integer isWall;
+
     public Cell(Integer row, Integer col, Color color) {
         this.row = row;
         this.col = col;
         this.color = color;
+        this.isWall = 0;
     }
 
     public Integer getRow() {
@@ -43,8 +50,47 @@ public class Cell extends Canvas {
         this.color = color;
     }
 
-    public void paint(Graphics g) {
-        System.out.println("X: " + this.col * WIDTH + ", Y: " + this.row * HEIGHT);
+    public Integer getIsWall() {
+        return isWall;
+    }
+
+    public void setIsWall(Integer isWall) {
+        this.isWall = isWall;
+    }
+
+    public boolean checkBlockCollideWall(WallPanel wallPanel, int moveDirection) {
+        boolean flag = false;
+        System.out.println("X:" + this.col + ", Y:" + this.row);
+        for (Cell[] row : wallPanel.getValues()) {
+            for (Cell c : row) {
+                int rowNum = this.row;
+                int colNum = this.col;
+                switch (moveDirection) {
+                    case 1:
+                        rowNum++;
+                        break;
+                    case 2:
+                        colNum--;
+                        break;
+                    case 3:
+                        colNum++;
+                        break;
+                    default:
+                        break;
+                }
+                if(rowNum == c.getRow() || colNum == c.getCol()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag) break;
+        }
+        return flag;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+//        System.out.println("X: " + this.col * WIDTH + ", Y: " + this.row * HEIGHT);
         g.drawRect(this.col * WIDTH, this.row * HEIGHT, WIDTH, HEIGHT);
         g.setColor(this.color);
         g.fillRect(this.col * WIDTH, this.row * HEIGHT, WIDTH, HEIGHT);
