@@ -15,11 +15,9 @@ public class I extends TetrisBlock {
         cellList.add(new Cell(0, 6, color));
     }
 
-    public void paint(Graphics g) {
-        System.out.println("paint");
-        for (Cell cell : cellList) {
-            cell.paint(g);
-        }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
     }
 
 }
