@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class WallPanel extends JPanel {
 
-    private Cell[][] values = new Cell[41][21];
+    private Cell[][] values = new Cell[40][22];
 
     public Cell[][] getValues() {
         return values;
@@ -17,15 +17,33 @@ public class WallPanel extends JPanel {
 
     public WallPanel() {
         for (int i = 0 ; i < this.values.length ; i++) {
-            for (int j = 0 ; j < this.values[i].length ; j++) {
-                this.values[i][j] = new Cell(i, j, Color.PINK);
+            if(i == this.values.length - 1) {
+                for (int j = 0 ; j < this.values[i].length ; j++) {
+                    this.values[i][j] = new Cell(i, j, Color.BLACK,1);
+                }
+            } else {
+                for (int j = 0 ; j < this.values[i].length ; j++) {
+                    if(j == 0 || j == this.values[i].length - 1) {
+                        this.values[i][j] = new Cell(i, j, Color.BLACK, 1);
+                    }else {
+                        this.values[i][j] = new Cell(i, j, new Color(0, 0, 0, 0));
+                    }
+                }
             }
         }
+        this.setOpaque(true);
+        this.setBounds(0, 0, Cell.WIDTH * 22, Cell.WIDTH * 40);
     }
 
     public void setWall(int x, int y, Color color) {
         values[y][x].setIsWall(1);
         values[y][x].setColor(color);
+    }
+
+    public void setWall(TetrisBlock block) {
+        for (Cell cell : block.getCellList()) {
+            setWall(cell.getCurrentCol(), cell.getCurrentRow(), cell.getColor());
+        }
     }
 
     @Override
@@ -35,9 +53,10 @@ public class WallPanel extends JPanel {
                 if(c == null) {
                     continue;
                 }
-//                if(c.getIsWall() == 1) {
+                if(c.getIsWall() == 1) {
+//                    System.out.println(c.getIsWall());
                     c.paintComponent(g);
-//                }
+                }
             }
         }
     }

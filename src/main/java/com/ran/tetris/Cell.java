@@ -11,35 +11,70 @@ public class Cell extends JPanel {
     public static final int MOVE_LEFT = 2;
     public static final int MOVE_RIGHT = 3;
 
-    private Integer row;
+    private Integer defaultRow;
 
-    private Integer col;
+    private Integer defaultCol;
+
+    private Integer currentRow;
+
+    private Integer currentCol;
 
     private Color color;
 
     private Integer isWall;
 
     public Cell(Integer row, Integer col, Color color) {
-        this.row = row;
-        this.col = col;
+        this.defaultRow = row;
+        this.currentRow = row;
+        this.defaultCol = col;
+        this.currentCol = col;
         this.color = color;
         this.isWall = 0;
+        this.setOpaque(true);
+        this.setBounds(0, 0, WIDTH, HEIGHT);
     }
 
-    public Integer getRow() {
-        return row;
+    public Cell(Integer row, Integer col, Color color, Integer isWall) {
+        this.defaultRow = row;
+        this.currentRow = row;
+        this.defaultCol = col;
+        this.currentCol = col;
+        this.color = color;
+        this.isWall = isWall;
+        this.setOpaque(true);
+        this.setBounds(0, 0, WIDTH, WIDTH);
     }
 
-    public void setRow(Integer row) {
-        this.row = row;
+    public Integer getDefaultRow() {
+        return defaultRow;
     }
 
-    public Integer getCol() {
-        return col;
+    public void setDefaultRow(Integer defaultRow) {
+        this.defaultRow = defaultRow;
     }
 
-    public void setCol(Integer col) {
-        this.col = col;
+    public Integer getDefaultCol() {
+        return defaultCol;
+    }
+
+    public void setDefaultCol(Integer defaultCol) {
+        this.defaultCol = defaultCol;
+    }
+
+    public Integer getCurrentRow() {
+        return currentRow;
+    }
+
+    public void setCurrentRow(Integer currentRow) {
+        this.currentRow = currentRow;
+    }
+
+    public Integer getCurrentCol() {
+        return currentCol;
+    }
+
+    public void setCurrentCol(Integer currentCol) {
+        this.currentCol = currentCol;
     }
 
     public Color getColor() {
@@ -59,41 +94,32 @@ public class Cell extends JPanel {
     }
 
     public boolean checkBlockCollideWall(WallPanel wallPanel, int moveDirection) {
-        boolean flag = false;
-        System.out.println("X:" + this.col + ", Y:" + this.row);
-        for (Cell[] row : wallPanel.getValues()) {
-            for (Cell c : row) {
-                int rowNum = this.row;
-                int colNum = this.col;
-                switch (moveDirection) {
-                    case 1:
-                        rowNum++;
-                        break;
-                    case 2:
-                        colNum--;
-                        break;
-                    case 3:
-                        colNum++;
-                        break;
-                    default:
-                        break;
-                }
-                if(rowNum == c.getRow() || colNum == c.getCol()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if(flag) break;
+        int rowNum = this.currentRow;
+        int colNum = this.currentCol;
+        switch (moveDirection) {
+            case MOVE_DOWN:
+                rowNum++;
+                break;
+            case MOVE_LEFT:
+                colNum--;
+                break;
+            case MOVE_RIGHT:
+                colNum++;
+                break;
+            default:
+                break;
         }
-        return flag;
+        Cell[][] wallCells = wallPanel.getValues();
+        System.out.println(rowNum + ", " + colNum + ": " + wallCells[rowNum][colNum].getIsWall());
+        return wallCells[rowNum][colNum].getIsWall() == 1;
     }
 
     @Override
     public void paintComponent(Graphics g) {
-//        System.out.println("X: " + this.col * WIDTH + ", Y: " + this.row * HEIGHT);
-        g.drawRect(this.col * WIDTH, this.row * HEIGHT, WIDTH, HEIGHT);
+//        System.out.println("X: " + this.defaultCol * WIDTH + ", Y: " + this.defaultRow * HEIGHT);
+        g.drawRect(this.defaultCol * WIDTH, this.defaultRow * HEIGHT, WIDTH, HEIGHT);
         g.setColor(this.color);
-        g.fillRect(this.col * WIDTH, this.row * HEIGHT, WIDTH, HEIGHT);
+        g.fillRect(this.defaultCol * WIDTH, this.defaultRow * HEIGHT, WIDTH, HEIGHT);
     }
 
 }

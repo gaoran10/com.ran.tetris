@@ -16,6 +16,11 @@ public class Z extends TetrisBlock {
     }
 
     @Override
+    public void change() {
+
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
