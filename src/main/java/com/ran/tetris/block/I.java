@@ -16,7 +16,6 @@ public class I extends TetrisBlock {
         cellList.add(new Cell(0, 3, COLOR));
         cellList.add(new Cell(0, 5, COLOR));
         cellList.add(new Cell(0, 6, COLOR));
-        TetrisBlock block = new I();
     }
 
     public void change() {
